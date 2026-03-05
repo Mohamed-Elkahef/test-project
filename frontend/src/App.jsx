@@ -1,4 +1,4 @@
-// Task ID: 88cca822
+// Task ID: 88cca822, 93b9969c
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import CreateOrder from './pages/CreateOrder';
 import OrderList from './pages/OrderList';
 import OrderDetail from './pages/OrderDetail';
+import InventoryDashboard from './pages/InventoryDashboard';
 
 /**
  * Main App component with routing and authentication.
@@ -53,6 +54,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrderDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute>
+                <InventoryDashboard />
               </ProtectedRoute>
             }
           />

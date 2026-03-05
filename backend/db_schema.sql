@@ -84,3 +84,21 @@ CREATE TABLE IF NOT EXISTS order_status_history (
 
 -- Create index on order_id for fast lookups
 CREATE INDEX idx_order_status_history_order_id ON order_status_history(order_id);
+
+-- Task ID: 93b9969c
+-- Create inventory_items table for tracking product inventory
+CREATE TABLE IF NOT EXISTS inventory_items (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    sku VARCHAR(255) UNIQUE NOT NULL,
+    quantity INTEGER DEFAULT 0 NOT NULL CHECK (quantity >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create index on sku for fast lookups
+CREATE INDEX idx_inventory_items_sku ON inventory_items(sku);
+
+-- Create trigger to automatically update updated_at timestamp for inventory_items
+CREATE TRIGGER update_inventory_items_updated_at BEFORE UPDATE ON inventory_items
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

@@ -1,11 +1,12 @@
-// Task ID: 6c269a18
-import { useState } from 'react';
+// Task ID: 6c269a18, 700e9c60
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import orderService from '../services/orderService';
 
 /**
  * CreateOrder page component for creating new orders.
  * Allows users to add customer information and dynamic line items.
+ * Task ID: 700e9c60 - Displays stock error notifications for insufficient inventory.
  */
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -22,6 +23,20 @@ const CreateOrder = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
+  // Task ID: 700e9c60 - Stock error state for toast notification
+  const [stockError, setStockError] = useState(null);
+  const [showStockToast, setShowStockToast] = useState(false);
+
+  // Task ID: 700e9c60 - Auto-dismiss toast after 8 seconds
+  useEffect(() => {
+    if (showStockToast) {
+      const timer = setTimeout(() => {
+        setShowStockToast(false);
+        setStockError(null);
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [showStockToast]);
 
   /**
    * Calculate subtotal for a single item.
@@ -113,12 +128,15 @@ const CreateOrder = () => {
 
   /**
    * Handle form submission.
+   * Task ID: 700e9c60 - Handles insufficient stock errors with toast notification.
    * @param {Event} e - Form submit event
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setValidationErrors({});
+    setStockError(null);
+    setShowStockToast(false);
 
     // Validate form
     if (!validateForm()) {
@@ -150,14 +168,70 @@ const CreateOrder = () => {
         }
       });
     } catch (err) {
-      setError(err.detail || 'Failed to create order. Please try again.');
+      // Task ID: 700e9c60 - Handle insufficient stock error with toast notification
+      const errorDetail = err.detail || err;
+      if (errorDetail && errorDetail.error === 'insufficient_stock') {
+        setStockError({
+          message: errorDetail.message,
+          productName: errorDetail.product_name,
+          requestedQuantity: errorDetail.requested_quantity,
+          availableQuantity: errorDetail.available_quantity,
+          sku: errorDetail.sku
+        });
+        setShowStockToast(true);
+      } else {
+        // Handle other errors
+        const errorMessage = typeof errorDetail === 'string'
+          ? errorDetail
+          : errorDetail?.message || 'Failed to create order. Please try again.';
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  /**
+   * Task ID: 700e9c60 - Dismiss stock error toast notification.
+   */
+  const dismissStockToast = () => {
+    setShowStockToast(false);
+    setStockError(null);
+  };
+
   return (
     <div style={styles.container}>
+      {/* Task ID: 700e9c60 - Stock Error Toast Notification */}
+      {showStockToast && stockError && (
+        <div style={styles.toastOverlay}>
+          <div style={styles.toastContainer}>
+            <div style={styles.toastIcon}>⚠️</div>
+            <div style={styles.toastContent}>
+              <h3 style={styles.toastTitle}>Insufficient Stock</h3>
+              <p style={styles.toastMessage}>
+                <strong>{stockError.productName}</strong>
+                {stockError.sku && <span style={styles.toastSku}> (SKU: {stockError.sku})</span>}
+              </p>
+              <p style={styles.toastDetails}>
+                Requested: <strong>{stockError.requestedQuantity}</strong> |
+                Available: <strong>{stockError.availableQuantity}</strong>
+              </p>
+              <p style={styles.toastHint}>
+                Please reduce the quantity or remove this item from your order.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={dismissStockToast}
+              style={styles.toastCloseButton}
+              aria-label="Dismiss notification"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <div style={styles.content}>
         <div style={styles.header}>
           <h1 style={styles.title}>Create New Order</h1>
@@ -572,6 +646,70 @@ const styles = {
   submitButtonDisabled: {
     backgroundColor: '#9ca3af',
     cursor: 'not-allowed'
+  },
+  // Task ID: 700e9c60 - Toast notification styles for stock errors
+  toastOverlay: {
+    position: 'fixed',
+    top: '1rem',
+    right: '1rem',
+    zIndex: 9999,
+    animation: 'slideIn 0.3s ease-out'
+  },
+  toastContainer: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '0.75rem',
+    maxWidth: '400px',
+    padding: '1rem',
+    backgroundColor: '#fef3cd',
+    border: '1px solid #ffc107',
+    borderLeft: '4px solid #ff9800',
+    borderRadius: '0.5rem',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+  },
+  toastIcon: {
+    fontSize: '1.5rem',
+    flexShrink: 0
+  },
+  toastContent: {
+    flex: 1
+  },
+  toastTitle: {
+    margin: '0 0 0.5rem 0',
+    fontSize: '1rem',
+    fontWeight: '600',
+    color: '#856404'
+  },
+  toastMessage: {
+    margin: '0 0 0.25rem 0',
+    fontSize: '0.875rem',
+    color: '#856404'
+  },
+  toastSku: {
+    fontSize: '0.75rem',
+    color: '#997a00'
+  },
+  toastDetails: {
+    margin: '0.25rem 0',
+    fontSize: '0.875rem',
+    color: '#856404'
+  },
+  toastHint: {
+    margin: '0.5rem 0 0 0',
+    fontSize: '0.75rem',
+    color: '#6c5500',
+    fontStyle: 'italic'
+  },
+  toastCloseButton: {
+    flexShrink: 0,
+    padding: '0.25rem',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderRadius: '0.25rem',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    color: '#856404',
+    lineHeight: 1
   }
 };
 

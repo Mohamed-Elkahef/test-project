@@ -1,4 +1,4 @@
-# Task ID: 88cca822
+# Task ID: 88cca822, 700e9c60
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional, Tuple
@@ -7,7 +7,12 @@ from decimal import Decimal
 from app.models.order import Order, OrderItem, OrderStatusHistory
 from app.models.user import User
 from app.schemas.order import OrderCreate, OrderItemCreate
+from app.services.inventory_service import InventoryService, InsufficientStockException
 import math
+
+
+# Re-export InsufficientStockException for use by endpoints
+__all__ = ['OrderService', 'InsufficientStockException']
 
 
 class OrderService:
@@ -64,6 +69,7 @@ class OrderService:
     def create_order(db: Session, order_data: OrderCreate, user_id: Optional[int] = None) -> Order:
         """
         Create a new order with items in a single transaction.
+        Task ID: 700e9c60 - Validates inventory stock and decrements on success.
 
         Args:
             db: Database session
@@ -75,6 +81,7 @@ class OrderService:
 
         Raises:
             ValueError: If no items provided or invalid quantities
+            InsufficientStockException: If requested quantity exceeds available stock
         """
         try:
             # Validate items
@@ -87,6 +94,16 @@ class OrderService:
                     raise ValueError(f"Quantity must be greater than 0 for {item.product_name}")
                 if item.unit_price <= 0:
                     raise ValueError(f"Unit price must be greater than 0 for {item.product_name}")
+
+            # Task ID: 700e9c60 - Prepare items list for inventory validation
+            items_to_validate = [
+                (item.product_name, item.quantity)
+                for item in order_data.items
+            ]
+
+            # Task ID: 700e9c60 - Validate stock availability and reserve stock
+            # This will raise InsufficientStockException if stock is insufficient
+            InventoryService.validate_and_reserve_stock(db, items_to_validate)
 
             # Generate unique order number
             order_number = OrderService._generate_order_number(db)
@@ -130,12 +147,15 @@ class OrderService:
                 )
                 db.add(db_item)
 
-            # Commit transaction
+            # Commit transaction (includes inventory decrement)
             db.commit()
             db.refresh(db_order)
 
             return db_order
 
+        except InsufficientStockException:
+            db.rollback()
+            raise
         except ValueError as e:
             db.rollback()
             raise e

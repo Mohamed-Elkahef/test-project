@@ -1,4 +1,4 @@
-# Task ID: 88cca822, 49a274b4
+# Task ID: 88cca822, 49a274b4, 700e9c60
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
@@ -11,6 +11,7 @@ from app.schemas.order import (
     OrderStatusUpdate, OrderStatusHistoryResponse
 )
 from app.services.order_service import OrderService
+from app.services.inventory_service import InsufficientStockException
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ def create_order(
 ):
     """
     Create a new order with items.
-    Task ID: 6c269a18, 49a274b4
+    Task ID: 6c269a18, 49a274b4, 700e9c60
 
     - **customer_name**: Name of the customer
     - **customer_email**: Email of the customer
@@ -31,14 +32,32 @@ def create_order(
     - **items**: List of order items (at least one required)
 
     Authentication is optional. If authenticated, the order will be linked to the user account.
+    Validates inventory stock before order creation and decrements stock on success.
 
     Returns the created order with auto-generated order_number and calculated totals.
+
+    Raises:
+        400 Bad Request: If validation fails or insufficient stock
+        500 Internal Server Error: If order creation fails
     """
     try:
         # Pass user ID if authenticated, None for guest orders
         user_id = current_user.id if current_user else None
         order = OrderService.create_order(db, order_data, user_id)
         return order
+    except InsufficientStockException as e:
+        # Task ID: 700e9c60 - Return specific stock error message
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error": "insufficient_stock",
+                "message": f"Stock not enough: {e.message}",
+                "product_name": e.product_name,
+                "requested_quantity": e.requested_quantity,
+                "available_quantity": e.available_quantity,
+                "sku": e.sku
+            }
+        )
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

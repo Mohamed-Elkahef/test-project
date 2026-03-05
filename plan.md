@@ -2,47 +2,36 @@
 
 ## Requirement
 
-**Create automated CLI setup and run interface for the application**
+**Implement simple inventory tracking with order integration and restock flags**
 
 **Requirement submitted via Telegram by @None**
 
-Create a CLI interface (cli.py) that can setup and run the application automatically without any manual intervention. The CLI should handle all necessary setup tasks and start the program seamlessly.
+i need to add new fetaure to manage the small and basic inventor for these items whcih teh order use to allo to the orgnization to know the item and qunatity an dteh order whill effect thia items cpount nad flag to teh item which need to restock dont mak teh modkule complectaed make it sample as posible just table to handel teh stock and linek to teh order management to reflect te plances and dashbaord to list teh istems with count and teh restock flage
 
 ---
 
 ## Features Overview
 
-Total features: 3
+Total features: 2
 
 
-### F001: CLI Prerequisites Checker & Environment Setup
+### F001: Inventory Management and Dashboard
 
-**Priority**: critical
-
-
-A CLI setup command that verifies all prerequisites (Python, Node.js, PostgreSQL, Redis), installs backend and frontend dependencies, runs database migrations, and generates default environment configuration files.
+**Priority**: high
 
 
-**Roles involved**: fullstack_engineer
-
-
-### F002: CLI Service Management (Start/Stop/Restart)
-
-**Priority**: critical
-
-
-CLI commands to start, stop, and restart the backend (FastAPI/Uvicorn) and frontend (Vite dev server) services with configurable flags for port, host, and debug mode in development mode.
+Establish a central system to track item quantities and SKUs, featuring a dashboard that flags items requiring restocking.
 
 
 **Roles involved**: fullstack_engineer
 
 
-### F003: CLI Status & Health Dashboard
+### F002: Order-Inventory Integration
 
-**Priority**: medium
+**Priority**: critical
 
 
-A CLI status command that displays the health and running state of all application services (backend, frontend, database, Redis) in a formatted terminal table.
+Connects the order management flow to the inventory system to automate stock deduction and prevent overselling.
 
 
 **Roles involved**: fullstack_engineer
