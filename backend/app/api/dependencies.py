@@ -84,3 +84,75 @@ def get_current_user(
         )
 
     return user
+
+
+def get_current_user_optional(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    db: Session = Depends(get_db)
+) -> Optional[User]:
+    """
+    Task ID: 49a274b4
+    Dependency to get current authenticated user from JWT token (optional).
+    Returns None if no credentials provided instead of raising an exception.
+
+    Args:
+        credentials: HTTP Bearer token credentials
+        db: Database session
+
+    Returns:
+        User: Current authenticated user or None if not authenticated
+
+    Raises:
+        HTTPException: 401 if token is provided but invalid
+    """
+    # If no credentials provided, return None (guest user)
+    if credentials is None:
+        return None
+
+    token = credentials.credentials
+
+    # Decode and verify token
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    # Verify token type is access token
+    if payload.get("type") != "access":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token type",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    # Get user from token
+    email = payload.get("sub")
+    user_id = payload.get("user_id")
+
+    if not email or not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    # Fetch user from database
+    user = UserService.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Inactive user",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    return user

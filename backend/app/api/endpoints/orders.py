@@ -1,10 +1,10 @@
-# Task ID: 88cca822
+# Task ID: 88cca822, 49a274b4
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
 from app.db.database import get_db
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, get_current_user_optional
 from app.models.user import User
 from app.schemas.order import (
     OrderCreate, OrderResponse, OrderListResponse, OrderListItem,
@@ -19,21 +19,25 @@ router = APIRouter()
 def create_order(
     order_data: OrderCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
     Create a new order with items.
-    Task ID: 6c269a18
+    Task ID: 6c269a18, 49a274b4
 
     - **customer_name**: Name of the customer
     - **customer_email**: Email of the customer
     - **notes**: Optional notes for the order
     - **items**: List of order items (at least one required)
 
+    Authentication is optional. If authenticated, the order will be linked to the user account.
+
     Returns the created order with auto-generated order_number and calculated totals.
     """
     try:
-        order = OrderService.create_order(db, order_data, current_user.id)
+        # Pass user ID if authenticated, None for guest orders
+        user_id = current_user.id if current_user else None
+        order = OrderService.create_order(db, order_data, user_id)
         return order
     except ValueError as e:
         raise HTTPException(

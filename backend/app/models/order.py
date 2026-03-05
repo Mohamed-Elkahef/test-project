@@ -18,7 +18,7 @@ class Order(Base):
     status = Column(String, default="pending", nullable=False)
     total_amount = Column(Numeric(10, 2), nullable=False)
     notes = Column(Text, nullable=True)
-    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 

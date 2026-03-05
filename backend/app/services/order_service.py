@@ -61,14 +61,14 @@ class OrderService:
         return Decimal(str(quantity)) * unit_price
 
     @staticmethod
-    def create_order(db: Session, order_data: OrderCreate, user_id: int) -> Order:
+    def create_order(db: Session, order_data: OrderCreate, user_id: Optional[int] = None) -> Order:
         """
         Create a new order with items in a single transaction.
 
         Args:
             db: Database session
             order_data: Order creation data including items
-            user_id: ID of the user creating the order
+            user_id: Optional ID of the user creating the order (None for guest orders)
 
         Returns:
             Order: The newly created order with items
