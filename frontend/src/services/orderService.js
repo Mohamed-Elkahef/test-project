@@ -1,4 +1,4 @@
-// Task ID: 88cca822
+// Task ID: 88cca822, 61b9a31e
 import axios from 'axios';
 import authService from './authService';
 import mockData from '../mock/orderMock.json';
@@ -12,11 +12,16 @@ const USE_MOCK = false; // Set to false to use real API
 class OrderService {
   /**
    * Get authorization headers with access token.
+   * Task ID: 61b9a31e
    * @private
    * @returns {Object} Headers object with authorization
+   * @throws {Error} If no access token is available
    */
   _getAuthHeaders() {
     const token = authService.getAccessToken();
+    if (!token) {
+      throw new Error('No authentication token available. Please login.');
+    }
     return {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -1,4 +1,4 @@
-# Task ID: c0c28f55
+# Task ID: c0c28f55, 61b9a31e
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
@@ -43,4 +43,13 @@ def root():
 @app.get("/health")
 def health_check():
     """Health check endpoint."""
+    return {"status": "healthy"}
+
+
+@app.get("/api/health")
+def api_health_check():
+    """
+    Task ID: 61b9a31e
+    API health check endpoint (for CLI compatibility).
+    """
     return {"status": "healthy"}
