@@ -1,4 +1,4 @@
-# Task ID: 88cca822
+# Task ID: 88cca822, 364c8938
 from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -8,6 +8,7 @@ from app.db.database import Base
 class Order(Base):
     """
     Order model representing the orders table in the database.
+    Task ID: 364c8938 - created_by is nullable to support guest orders.
     """
     __tablename__ = "orders"
 
@@ -18,7 +19,7 @@ class Order(Base):
     status = Column(String, default="pending", nullable=False)
     total_amount = Column(Numeric(10, 2), nullable=False)
     notes = Column(Text, nullable=True)
-    created_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=True)  # Task ID: 364c8938
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 

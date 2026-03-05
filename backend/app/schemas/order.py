@@ -69,7 +69,10 @@ class OrderCreate(BaseModel):
 
 
 class OrderResponse(BaseModel):
-    """Schema for order response."""
+    """
+    Task ID: 364c8938
+    Schema for order response.
+    """
     id: int
     order_number: str
     customer_name: str
@@ -77,7 +80,7 @@ class OrderResponse(BaseModel):
     status: str
     total_amount: Decimal
     notes: Optional[str]
-    created_by: int
+    created_by: Optional[int] = None  # Nullable to support guest orders
     created_at: datetime
     updated_at: datetime
     items: List[OrderItemResponse]
