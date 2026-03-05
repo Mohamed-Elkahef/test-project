@@ -1,4 +1,4 @@
-// Task ID: 88cca822
+// Task ID: 88cca822, 93b9969c
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -35,6 +35,9 @@ const Navbar = () => {
           </Link>
           <Link to="/orders/create" style={styles.navLink}>
             Create Order
+          </Link>
+          <Link to="/inventory" style={styles.navLink}>
+            Inventory
           </Link>
         </div>
         <div style={styles.userSection}>
