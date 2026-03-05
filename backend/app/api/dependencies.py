@@ -1,4 +1,5 @@
-# Task ID: c0c28f55
+# Task ID: d1d00349
+from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
@@ -7,12 +8,12 @@ from app.core.security import decode_token
 from app.services.user_service import UserService
 from app.models.user import User
 
-# HTTP Bearer token scheme
-security = HTTPBearer()
+# HTTP Bearer token scheme with auto_error=False to handle missing credentials manually
+security = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
     db: Session = Depends(get_db)
 ) -> User:
     """
@@ -26,8 +27,16 @@ def get_current_user(
         User: Current authenticated user
 
     Raises:
-        HTTPException: 401 if token is invalid or user not found
+        HTTPException: 401 if token is missing, invalid or user not found
     """
+    # Check if credentials are provided
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
     token = credentials.credentials
 
     # Decode and verify token
