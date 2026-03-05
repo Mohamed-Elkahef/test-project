@@ -12,7 +12,6 @@ For every assigned task you will:
 5. **Connect**: Ensure all layers work together end-to-end
 6. **Test**: Write or update tests for the implemented functionality
 
-
 you can assest another agents from the `.claude/agents/` directory as it has spicfic agents to each function and `.claude/skills/` directory as it has specific skills to each function
 ## Implementation Order
 

@@ -4,7 +4,7 @@ import authService from './authService';
 import mockData from '../mock/dashboardMock.json';
 
 const API_URL = '/api/dashboard';
-const USE_MOCK = true; // Set to false to use real API
+const USE_MOCK = false; // Set to false to use real API
 
 /**
  * Dashboard service for handling dashboard-related API calls.

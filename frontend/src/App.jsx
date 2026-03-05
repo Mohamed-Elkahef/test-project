@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import CreateOrder from './pages/CreateOrder';
 import OrderList from './pages/OrderList';
+import OrderDetail from './pages/OrderDetail';
 
 /**
  * Main App component with routing and authentication.
@@ -44,6 +45,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateOrder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/:orderId"
+            element={
+              <ProtectedRoute>
+                <OrderDetail />
               </ProtectedRoute>
             }
           />
