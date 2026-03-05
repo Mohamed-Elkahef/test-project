@@ -4,7 +4,7 @@ import authService from './authService';
 import mockData from '../mock/orderMock.json';
 
 const API_URL = '/api/orders';
-const USE_MOCK = true; // Set to false to use real API
+const USE_MOCK = false; // Set to false to use real API
 
 /**
  * Order service for handling order-related API calls.
