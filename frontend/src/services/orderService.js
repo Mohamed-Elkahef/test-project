@@ -1,9 +1,10 @@
-// Task ID: 88cca822, 61b9a31e
+// Task ID: 88cca822, 61b9a31e, d315225b
 import axios from 'axios';
 import authService from './authService';
 import mockData from '../mock/orderMock.json';
 
-const API_URL = '/api/orders';
+// Note: Trailing slash is required to prevent 307 redirect which drops Authorization header
+const API_URL = '/api/orders/';
 const USE_MOCK = false; // Set to false to use real API
 
 /**
@@ -63,12 +64,12 @@ class OrderService {
    */
   async getOrder(orderId) {
     try {
-      const response = await axios.get(`${API_URL}/${orderId}`, this._getAuthHeaders());
+      const response = await axios.get(`${API_URL}${orderId}`, this._getAuthHeaders());
       return response.data;
     } catch (error) {
       if (error.response?.status === 401) {
         await authService.refreshToken();
-        const retryResponse = await axios.get(`${API_URL}/${orderId}`, this._getAuthHeaders());
+        const retryResponse = await axios.get(`${API_URL}${orderId}`, this._getAuthHeaders());
         return retryResponse.data;
       }
       throw error.response?.data || { detail: 'Failed to fetch order' };
@@ -199,7 +200,7 @@ class OrderService {
       }
 
       const response = await axios.patch(
-        `${API_URL}/${orderId}/status`,
+        `${API_URL}${orderId}/status`,
         payload,
         this._getAuthHeaders()
       );
@@ -212,7 +213,7 @@ class OrderService {
           payload.notes = notes;
         }
         const retryResponse = await axios.patch(
-          `${API_URL}/${orderId}/status`,
+          `${API_URL}${orderId}/status`,
           payload,
           this._getAuthHeaders()
         );
@@ -231,7 +232,7 @@ class OrderService {
   async getOrderStatusHistory(orderId) {
     try {
       const response = await axios.get(
-        `${API_URL}/${orderId}/history`,
+        `${API_URL}${orderId}/history`,
         this._getAuthHeaders()
       );
       return response.data;
@@ -239,7 +240,7 @@ class OrderService {
       if (error.response?.status === 401) {
         await authService.refreshToken();
         const retryResponse = await axios.get(
-          `${API_URL}/${orderId}/history`,
+          `${API_URL}${orderId}/history`,
           this._getAuthHeaders()
         );
         return retryResponse.data;
@@ -257,7 +258,7 @@ class OrderService {
   async getValidNextStatuses(orderId) {
     try {
       const response = await axios.get(
-        `${API_URL}/${orderId}/valid-statuses`,
+        `${API_URL}${orderId}/valid-statuses`,
         this._getAuthHeaders()
       );
       return response.data;
@@ -265,7 +266,7 @@ class OrderService {
       if (error.response?.status === 401) {
         await authService.refreshToken();
         const retryResponse = await axios.get(
-          `${API_URL}/${orderId}/valid-statuses`,
+          `${API_URL}${orderId}/valid-statuses`,
           this._getAuthHeaders()
         );
         return retryResponse.data;
