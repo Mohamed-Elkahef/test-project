@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Wireframe - Mobile & Tablet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f5f7fa;
+            padding: 0;
+        }
+
+        .viewport-container {
+            display: flex;
+            gap: 40px;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .device-frame {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .device-header {
+            background: #1f2937;
+            color: white;
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .mobile-frame {
+            width: 375px;
+        }
+
+        .tablet-frame {
+            width: 768px;
+        }
+
+        .device-content {
+            background: #f5f7fa;
+            overflow-y: auto;
+            max-height: 800px;
+        }
+
+        /* Mobile Layout */
+        .mobile-container {
+            padding: 16px;
+        }
+
+        .mobile-header {
+            margin-bottom: 24px;
+        }
+
+        .mobile-header h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .mobile-header p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Mobile Stat Cards */
+        .mobile-stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .mobile-stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .mobile-stat-card.revenue {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .mobile-stat-card.today-orders {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .mobile-stat-card.today-revenue {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .mobile-stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .mobile-stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .mobile-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .mobile-stat-change {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        /* Mobile Sections */
+        .mobile-section {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .mobile-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .mobile-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .mobile-view-all {
+            font-size: 13px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Mobile Status Items */
+        .mobile-status-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .mobile-status-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .mobile-status-dot.pending { background: #3b82f6; }
+        .mobile-status-dot.processing { background: #f59e0b; }
+        .mobile-status-dot.shipped { background: #10b981; }
+        .mobile-status-dot.delivered { background: #8b5cf6; }
+        .mobile-status-dot.cancelled { background: #ef4444; }
+
+        .mobile-status-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .mobile-status-count {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Mobile Order Cards */
+        .mobile-order-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .mobile-order-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .mobile-order-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .mobile-status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .mobile-status-badge.pending {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .mobile-status-badge.processing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .mobile-status-badge.shipped {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .mobile-status-badge.delivered {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        .mobile-status-badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .mobile-order-customer {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .mobile-order-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .mobile-order-amount {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Tablet Layout */
+        .tablet-container {
+            padding: 24px;
+        }
+
+        .tablet-header {
+            margin-bottom: 32px;
+        }
+
+        .tablet-header h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .tablet-header p {
+            font-size: 15px;
+            color: #6b7280;
+        }
+
+        /* Tablet Stat Cards */
+        .tablet-stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .tablet-stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .tablet-stat-card.revenue {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .tablet-stat-card.today-orders {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .tablet-stat-card.today-revenue {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .tablet-stat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .tablet-stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tablet-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .tablet-stat-change {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+
+        /* Tablet Sections */
+        .tablet-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tablet-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .tablet-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .tablet-view-all {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Tablet Status Grid */
+        .tablet-status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .tablet-status-item {
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tablet-status-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tablet-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .tablet-status-dot.pending { background: #3b82f6; }
+        .tablet-status-dot.processing { background: #f59e0b; }
+        .tablet-status-dot.shipped { background: #10b981; }
+        .tablet-status-dot.delivered { background: #8b5cf6; }
+        .tablet-status-dot.cancelled { background: #ef4444; }
+
+        .tablet-status-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .tablet-status-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Tablet Order Table */
+        .tablet-order-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tablet-order-table thead {
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tablet-order-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+
+        .tablet-order-table td {
+            padding: 14px 12px;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .tablet-order-number {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .annotation {
+            position: relative;
+            padding: 8px 12px;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            font-size: 11px;
+            color: #92400e;
+            margin-top: 12px;
+            border-radius: 4px;
+        }
+
+        .annotation::before {
+            content: '📱 Design Note: ';
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewport-container">
+        <!-- Mobile Layout (375px) -->
+        <div class="device-frame mobile-frame">
+            <div class="device-header">📱 Mobile Layout (375px)</div>
+            <div class="device-content">
+                <div class="mobile-container">
+                    <div class="mobile-header">
+                        <h1>Dashboard</h1>
+                        <p>Welcome back, Admin</p>
+                    </div>
+
+                    <!-- Mobile Stat Cards (2x2 Grid) -->
+                    <div class="mobile-stat-cards">
+                        <div class="mobile-stat-card">
+                            <div class="mobile-stat-icon">📦</div>
+                            <div class="mobile-stat-label">Total Orders</div>
+                            <div class="mobile-stat-value">1,247</div>
+                            <div class="mobile-stat-change">↑ 12%</div>
+                        </div>
+
+                        <div class="mobile-stat-card today-orders">
+                            <div class="mobile-stat-icon">🕐</div>
+                            <div class="mobile-stat-label">Today</div>
+                            <div class="mobile-stat-value">23</div>
+                            <div class="mobile-stat-change">5 recent</div>
+                        </div>
+
+                        <div class="mobile-stat-card revenue">
+                            <div class="mobile-stat-icon">💰</div>
+                            <div class="mobile-stat-label">Revenue</div>
+                            <div class="mobile-stat-value">$48K</div>
+                            <div class="mobile-stat-change">↑ 8%</div>
+                        </div>
+
+                        <div class="mobile-stat-card today-revenue">
+                            <div class="mobile-stat-icon">📈</div>
+                            <div class="mobile-stat-label">Today Rev</div>
+                            <div class="mobile-stat-value">$1.8K</div>
+                            <div class="mobile-stat-change">23 orders</div>
+                        </div>
+                    </div>
+
+                    <div class="annotation">2x2 grid for stat cards on mobile. Compact text, abbreviated labels.</div>
+
+                    <!-- Status Breakdown Section -->
+                    <div class="mobile-section">
+                        <div class="mobile-section-header">
+                            <div class="mobile-section-title">Order Status</div>
+                            <a href="#" class="mobile-view-all">View All →</a>
+                        </div>
+
+                        <div class="mobile-status-list">
+                            <div class="mobile-status-item">
+                                <div class="mobile-status-info">
+                                    <div class="mobile-status-dot pending"></div>
+                                    <span class="mobile-status-name">Pending</span>
+                                </div>
+                                <span class="mobile-status-count">248</span>
+                            </div>
+
+                            <div class="mobile-status-item">
+                                <div class="mobile-status-info">
+                                    <div class="mobile-status-dot processing"></div>
+                                    <span class="mobile-status-name">Processing</span>
+                                </div>
+                                <span class="mobile-status-count">249</span>
+                            </div>
+
+                            <div class="mobile-status-item">
+                                <div class="mobile-status-info">
+                                    <div class="mobile-status-dot shipped"></div>
+                                    <span class="mobile-status-name">Shipped</span>
+                                </div>
+                                <span class="mobile-status-count">374</span>
+                            </div>
+
+                            <div class="mobile-status-item">
+                                <div class="mobile-status-info">
+                                    <div class="mobile-status-dot delivered"></div>
+                                    <span class="mobile-status-name">Delivered</span>
+                                </div>
+                                <span class="mobile-status-count">249</span>
+                            </div>
+
+                            <div class="mobile-status-item">
+                                <div class="mobile-status-info">
+                                    <div class="mobile-status-dot cancelled"></div>
+                                    <span class="mobile-status-name">Cancelled</span>
+                                </div>
+                                <span class="mobile-status-count">127</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="annotation">List view for status on mobile. No chart to save space. Tappable items.</div>
+
+                    <!-- Recent Orders Section -->
+                    <div class="mobile-section">
+                        <div class="mobile-section-header">
+                            <div class="mobile-section-title">Recent Orders</div>
+                            <a href="#" class="mobile-view-all">View All →</a>
+                        </div>
+
+                        <div class="mobile-order-card">
+                            <div class="mobile-order-header">
+                                <span class="mobile-order-number">ORD-20260305-0142</span>
+                                <span class="mobile-status-badge processing">Processing</span>
+                            </div>
+                            <div class="mobile-order-customer">John Smith</div>
+                            <div class="mobile-order-details">
+                                <span>3 items • 2 hours ago</span>
+                                <span class="mobile-order-amount">$127.50</span>
+                            </div>
+                        </div>
+
+                        <div class="mobile-order-card">
+                            <div class="mobile-order-header">
+                                <span class="mobile-order-number">ORD-20260305-0141</span>
+                                <span class="mobile-status-badge shipped">Shipped</span>
+                            </div>
+                            <div class="mobile-order-customer">Sarah Johnson</div>
+                            <div class="mobile-order-details">
+                                <span>1 item • 3 hours ago</span>
+                                <span class="mobile-order-amount">$45.00</span>
+                            </div>
+                        </div>
+
+                        <div class="mobile-order-card">
+                            <div class="mobile-order-header">
+                                <span class="mobile-order-number">ORD-20260305-0140</span>
+                                <span class="mobile-status-badge pending">Pending</span>
+                            </div>
+                            <div class="mobile-order-customer">Michael Brown</div>
+                            <div class="mobile-order-details">
+                                <span>5 items • 4 hours ago</span>
+                                <span class="mobile-order-amount">$234.80</span>
+                            </div>
+                        </div>
+
+                        <div class="mobile-order-card">
+                            <div class="mobile-order-header">
+                                <span class="mobile-order-number">ORD-20260305-0139</span>
+                                <span class="mobile-status-badge delivered">Delivered</span>
+                            </div>
+                            <div class="mobile-order-customer">Emily Davis</div>
+                            <div class="mobile-order-details">
+                                <span>2 items • 5 hours ago</span>
+                                <span class="mobile-order-amount">$89.99</span>
+                            </div>
+                        </div>
+
+                        <div class="mobile-order-card">
+                            <div class="mobile-order-header">
+                                <span class="mobile-order-number">ORD-20260305-0138</span>
+                                <span class="mobile-status-badge cancelled">Cancelled</span>
+                            </div>
+                            <div class="mobile-order-customer">David Wilson</div>
+                            <div class="mobile-order-details">
+                                <span>1 item • 6 hours ago</span>
+                                <span class="mobile-order-amount">$32.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="annotation">Card layout for orders on mobile. Vertical stack with key info. Swipeable for actions.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablet Layout (768px) -->
+        <div class="device-frame tablet-frame">
+            <div class="device-header">📱 Tablet Layout (768px)</div>
+            <div class="device-content">
+                <div class="tablet-container">
+                    <div class="tablet-header">
+                        <h1>Dashboard</h1>
+                        <p>Order Management System - Overview</p>
+                    </div>
+
+                    <!-- Tablet Stat Cards (4 columns) -->
+                    <div class="tablet-stat-cards">
+                        <div class="tablet-stat-card">
+                            <div class="tablet-stat-icon">📦</div>
+                            <div class="tablet-stat-label">Total Orders</div>
+                            <div class="tablet-stat-value">1,247</div>
+                            <div class="tablet-stat-change">↑ 12% from last month</div>
+                        </div>
+
+                        <div class="tablet-stat-card today-orders">
+                            <div class="tablet-stat-icon">🕐</div>
+                            <div class="tablet-stat-label">Orders Today</div>
+                            <div class="tablet-stat-value">23</div>
+                            <div class="tablet-stat-change">5 in the last hour</div>
+                        </div>
+
+                        <div class="tablet-stat-card revenue">
+                            <div class="tablet-stat-icon">💰</div>
+                            <div class="tablet-stat-label">Total Revenue</div>
+                            <div class="tablet-stat-value">$48,352</div>
+                            <div class="tablet-stat-change">↑ 8% from last month</div>
+                        </div>
+
+                        <div class="tablet-stat-card today-revenue">
+                            <div class="tablet-stat-icon">📈</div>
+                            <div class="tablet-stat-label">Revenue Today</div>
+                            <div class="tablet-stat-value">$1,842</div>
+                            <div class="tablet-stat-change">23 orders processed</div>
+                        </div>
+                    </div>
+
+                    <div class="annotation">4 stat cards in single row on tablet. Similar to desktop but slightly smaller.</div>
+
+                    <!-- Status Breakdown Section -->
+                    <div class="tablet-section">
+                        <div class="tablet-section-header">
+                            <div class="tablet-section-title">Order Status Breakdown</div>
+                        </div>
+
+                        <div class="tablet-status-grid">
+                            <div class="tablet-status-item">
+                                <div class="tablet-status-info">
+                                    <div class="tablet-status-dot pending"></div>
+                                    <span class="tablet-status-name">Pending</span>
+                                </div>
+                                <span class="tablet-status-count">248</span>
+                            </div>
+
+                            <div class="tablet-status-item">
+                                <div class="tablet-status-info">
+                                    <div class="tablet-status-dot processing"></div>
+                                    <span class="tablet-status-name">Processing</span>
+                                </div>
+                                <span class="tablet-status-count">249</span>
+                            </div>
+
+                            <div class="tablet-status-item">
+                                <div class="tablet-status-info">
+                                    <div class="tablet-status-dot shipped"></div>
+                                    <span class="tablet-status-name">Shipped</span>
+                                </div>
+                                <span class="tablet-status-count">374</span>
+                            </div>
+
+                            <div class="tablet-status-item">
+                                <div class="tablet-status-info">
+                                    <div class="tablet-status-dot delivered"></div>
+                                    <span class="tablet-status-name">Delivered</span>
+                                </div>
+                                <span class="tablet-status-count">249</span>
+                            </div>
+
+                            <div class="tablet-status-item">
+                                <div class="tablet-status-info">
+                                    <div class="tablet-status-dot cancelled"></div>
+                                    <span class="tablet-status-name">Cancelled</span>
+                                </div>
+                                <span class="tablet-status-count">127</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="annotation">2-column grid for status items on tablet. No chart, space-efficient layout.</div>
+
+                    <!-- Recent Orders Section -->
+                    <div class="tablet-section">
+                        <div class="tablet-section-header">
+                            <div class="tablet-section-title">Recent Orders</div>
+                            <a href="#" class="tablet-view-all">View All Orders</a>
+                        </div>
+
+                        <table class="tablet-order-table">
+                            <thead>
+                                <tr>
+                                    <th>Order Number</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tablet-order-number">ORD-20260305-0142</span></td>
+                                    <td>John Smith</td>
+                                    <td><span class="mobile-status-badge processing">Processing</span></td>
+                                    <td>$127.50</td>
+                                    <td>2 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tablet-order-number">ORD-20260305-0141</span></td>
+                                    <td>Sarah Johnson</td>
+                                    <td><span class="mobile-status-badge shipped">Shipped</span></td>
+                                    <td>$45.00</td>
+                                    <td>3 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tablet-order-number">ORD-20260305-0140</span></td>
+                                    <td>Michael Brown</td>
+                                    <td><span class="mobile-status-badge pending">Pending</span></td>
+                                    <td>$234.80</td>
+                                    <td>4 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tablet-order-number">ORD-20260305-0139</span></td>
+                                    <td>Emily Davis</td>
+                                    <td><span class="mobile-status-badge delivered">Delivered</span></td>
+                                    <td>$89.99</td>
+                                    <td>5 hours ago</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tablet-order-number">ORD-20260305-0138</span></td>
+                                    <td>David Wilson</td>
+                                    <td><span class="mobile-status-badge cancelled">Cancelled</span></td>
+                                    <td>$32.50</td>
+                                    <td>6 hours ago</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="annotation">Table layout for orders on tablet. Condensed columns, removing "Items" to fit screen.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 40px; background: white; margin: 20px; border-radius: 12px;">
+        <h2 style="margin-bottom: 16px;">Responsive Breakpoints Summary</h2>
+        <div style="padding: 16px; background: #f9fafb; border-radius: 8px; margin-bottom: 12px;">
+            <strong>Mobile (320px - 767px):</strong>
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li>2x2 grid for stat cards</li>
+                <li>List view for status breakdown (no chart)</li>
+                <li>Card-based layout for recent orders</li>
+                <li>Stacked sections, full-width components</li>
+                <li>Abbreviated labels for space efficiency</li>
+            </ul>
+        </div>
+        <div style="padding: 16px; background: #f9fafb; border-radius: 8px; margin-bottom: 12px;">
+            <strong>Tablet (768px - 1023px):</strong>
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li>4 stat cards in single row</li>
+                <li>2-column grid for status items</li>
+                <li>Table layout for recent orders (condensed columns)</li>
+                <li>Sections remain full-width</li>
+                <li>More padding and spacing than mobile</li>
+            </ul>
+        </div>
+        <div style="padding: 16px; background: #f9fafb; border-radius: 8px;">
+            <strong>Desktop (1024px+):</strong>
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li>4 stat cards in single row with larger padding</li>
+                <li>2-column grid for status section and quick stats</li>
+                <li>Donut chart visualization with legend</li>
+                <li>Full table for recent orders with all columns</li>
+                <li>Maximum content width of 1400px, centered</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

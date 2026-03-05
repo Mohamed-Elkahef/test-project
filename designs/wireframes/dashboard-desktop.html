@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Wireframe - Desktop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* Stat Cards Section */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-card.revenue {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-card.today-orders {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-card.today-revenue {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card-label {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-card-change {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Status Breakdown Section */
+        .section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .donut-chart {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #3b82f6 0deg 72deg,
+                #f59e0b 72deg 144deg,
+                #10b981 144deg 252deg,
+                #8b5cf6 252deg 324deg,
+                #ef4444 324deg 360deg
+            );
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .donut-chart::after {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .chart-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .chart-center-text .total {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .chart-center-text .label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-legend {
+            flex: 1;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: #f9fafb;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .status-item:hover {
+            background: #f3f4f6;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-dot.pending { background: #3b82f6; }
+        .status-dot.processing { background: #f59e0b; }
+        .status-dot.shipped { background: #10b981; }
+        .status-dot.delivered { background: #8b5cf6; }
+        .status-dot.cancelled { background: #ef4444; }
+
+        .status-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #374151;
+            text-transform: capitalize;
+        }
+
+        .status-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .status-percentage {
+            font-size: 13px;
+            color: #6b7280;
+            margin-left: 8px;
+        }
+
+        /* Recent Orders Section */
+        .recent-orders {
+            grid-column: 1 / -1;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table thead {
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .orders-table th {
+            text-align: left;
+            padding: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .orders-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+
+        .orders-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .orders-table td {
+            padding: 16px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .order-number {
+            font-weight: 600;
+            color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .order-number:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-badge.pending {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.processing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.shipped {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.delivered {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        .status-badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .view-all {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .view-all:hover {
+            background: #2563eb;
+        }
+
+        /* Annotations */
+        .annotation {
+            position: relative;
+            padding: 8px 12px;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            font-size: 12px;
+            color: #92400e;
+            margin-top: 12px;
+            border-radius: 4px;
+        }
+
+        .annotation::before {
+            content: '📋 Design Note: ';
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard - Desktop Layout (1400px)</h1>
+            <p>Order Management System - Main Dashboard View</p>
+        </div>
+
+        <!-- Stat Cards Section -->
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-card-icon">📦</div>
+                </div>
+                <div class="stat-card-label">Total Orders</div>
+                <div class="stat-card-value">1,247</div>
+                <div class="stat-card-change">↑ 12% from last month</div>
+                <div class="annotation">Icon: Package/Box icon (48x48px), positioned top-right</div>
+            </div>
+
+            <div class="stat-card today-orders">
+                <div class="stat-card-header">
+                    <div class="stat-card-icon">🕐</div>
+                </div>
+                <div class="stat-card-label">Orders Today</div>
+                <div class="stat-card-value">23</div>
+                <div class="stat-card-change">5 in the last hour</div>
+                <div class="annotation">Icon: Clock/Calendar icon, cyan gradient background</div>
+            </div>
+
+            <div class="stat-card revenue">
+                <div class="stat-card-header">
+                    <div class="stat-card-icon">💰</div>
+                </div>
+                <div class="stat-card-label">Total Revenue</div>
+                <div class="stat-card-value">$48,352</div>
+                <div class="stat-card-change">↑ 8% from last month</div>
+                <div class="annotation">Icon: Currency/Dollar icon, pink-red gradient</div>
+            </div>
+
+            <div class="stat-card today-revenue">
+                <div class="stat-card-header">
+                    <div class="stat-card-icon">📈</div>
+                </div>
+                <div class="stat-card-label">Revenue Today</div>
+                <div class="stat-card-value">$1,842</div>
+                <div class="stat-card-change">23 orders processed</div>
+                <div class="annotation">Icon: Trending Up icon, green gradient</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid with Status and Chart -->
+        <div class="dashboard-grid">
+            <!-- Status Breakdown Section -->
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Order Status Breakdown</div>
+                        <div class="section-subtitle">Distribution of orders by status</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="donut-chart">
+                        <div class="chart-center-text">
+                            <div class="total">1,247</div>
+                            <div class="label">Total</div>
+                        </div>
+                    </div>
+
+                    <div class="status-legend">
+                        <div class="status-item">
+                            <div class="status-info">
+                                <div class="status-dot pending"></div>
+                                <span class="status-name">Pending</span>
+                            </div>
+                            <div>
+                                <span class="status-count">248</span>
+                                <span class="status-percentage">20%</span>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-info">
+                                <div class="status-dot processing"></div>
+                                <span class="status-name">Processing</span>
+                            </div>
+                            <div>
+                                <span class="status-count">249</span>
+                                <span class="status-percentage">20%</span>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-info">
+                                <div class="status-dot shipped"></div>
+                                <span class="status-name">Shipped</span>
+                            </div>
+                            <div>
+                                <span class="status-count">374</span>
+                                <span class="status-percentage">30%</span>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-info">
+                                <div class="status-dot delivered"></div>
+                                <span class="status-name">Delivered</span>
+                            </div>
+                            <div>
+                                <span class="status-count">249</span>
+                                <span class="status-percentage">20%</span>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-info">
+                                <div class="status-dot cancelled"></div>
+                                <span class="status-name">Cancelled</span>
+                            </div>
+                            <div>
+                                <span class="status-count">127</span>
+                                <span class="status-percentage">10%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="annotation">Donut chart (220x220px) with center total. Legend items interactive with hover states.</div>
+            </div>
+
+            <!-- Quick Stats Section -->
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Quick Stats</div>
+                        <div class="section-subtitle">Key performance indicators</div>
+                    </div>
+                </div>
+
+                <div style="padding: 20px 0;">
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 14px; color: #6b7280;">Average Order Value</span>
+                            <span style="font-size: 18px; font-weight: 600;">$38.76</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 65%; height: 100%; background: #3b82f6;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 14px; color: #6b7280;">Fulfillment Rate</span>
+                            <span style="font-size: 18px; font-weight: 600;">89%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 89%; height: 100%; background: #10b981;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 14px; color: #6b7280;">Customer Satisfaction</span>
+                            <span style="font-size: 18px; font-weight: 600;">4.8/5.0</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 96%; height: 100%; background: #f59e0b;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="annotation">Progress bars for secondary metrics. Values update in real-time.</div>
+            </div>
+        </div>
+
+        <!-- Recent Orders Section -->
+        <div class="section recent-orders">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Recent Orders</div>
+                    <div class="section-subtitle">Latest 5 orders from the system</div>
+                </div>
+                <a href="#" class="view-all">View All Orders</a>
+            </div>
+
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Items</th>
+                        <th>Total Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="order-number">ORD-20260305-0142</span></td>
+                        <td>John Smith</td>
+                        <td><span class="status-badge processing">Processing</span></td>
+                        <td>3</td>
+                        <td>$127.50</td>
+                        <td>2 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td><span class="order-number">ORD-20260305-0141</span></td>
+                        <td>Sarah Johnson</td>
+                        <td><span class="status-badge shipped">Shipped</span></td>
+                        <td>1</td>
+                        <td>$45.00</td>
+                        <td>3 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td><span class="order-number">ORD-20260305-0140</span></td>
+                        <td>Michael Brown</td>
+                        <td><span class="status-badge pending">Pending</span></td>
+                        <td>5</td>
+                        <td>$234.80</td>
+                        <td>4 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td><span class="order-number">ORD-20260305-0139</span></td>
+                        <td>Emily Davis</td>
+                        <td><span class="status-badge delivered">Delivered</span></td>
+                        <td>2</td>
+                        <td>$89.99</td>
+                        <td>5 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td><span class="order-number">ORD-20260305-0138</span></td>
+                        <td>David Wilson</td>
+                        <td><span class="status-badge cancelled">Cancelled</span></td>
+                        <td>1</td>
+                        <td>$32.50</td>
+                        <td>6 hours ago</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="annotation">Table is sortable by clicking column headers. Rows clickable to navigate to order detail. Status badges have consistent colors matching the donut chart.</div>
+        </div>
+    </div>
+</body>
+</html>

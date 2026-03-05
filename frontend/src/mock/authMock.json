@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@example.com",
+      "password": "password123",
+      "full_name": "Admin User",
+      "is_active": true,
+      "created_at": "2026-03-01T10:00:00Z",
+      "updated_at": "2026-03-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "email": "john@example.com",
+      "password": "password123",
+      "full_name": "John Doe",
+      "is_active": true,
+      "created_at": "2026-03-02T10:00:00Z",
+      "updated_at": "2026-03-02T10:00:00Z"
+    }
+  ],
+  "tokens": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInVzZXJfaWQiOjEsImV4cCI6OTk5OTk5OTk5OTksInR5cGUiOiJhY2Nlc3MifQ.mock_signature",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInVzZXJfaWQiOjEsImV4cCI6OTk5OTk5OTk5OTksInR5cGUiOiJyZWZyZXNoIn0.mock_signature",
+    "token_type": "bearer"
+  }
+}
