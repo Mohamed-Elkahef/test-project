@@ -6,7 +6,10 @@ from datetime import datetime
 from app.db.database import get_db
 from app.api.dependencies import get_current_user
 from app.models.user import User
-from app.schemas.order import OrderCreate, OrderResponse, OrderListResponse, OrderListItem
+from app.schemas.order import (
+    OrderCreate, OrderResponse, OrderListResponse, OrderListItem,
+    OrderStatusUpdate, OrderStatusHistoryResponse
+)
 from app.services.order_service import OrderService
 
 router = APIRouter()
@@ -20,6 +23,7 @@ def create_order(
 ):
     """
     Create a new order with items.
+    Task ID: 6c269a18
 
     - **customer_name**: Name of the customer
     - **customer_email**: Email of the customer
@@ -105,3 +109,98 @@ def get_orders(
         per_page=per_page,
         total_pages=total_pages
     )
+
+
+@router.patch("/{order_id}/status", response_model=OrderResponse)
+def update_order_status(
+    order_id: int,
+    status_update: OrderStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Task ID: 09f4a7e6
+    Update order status with validation of allowed transitions.
+
+    - **order_id**: ID of the order to update
+    - **new_status**: New status (pending, processing, shipped, delivered, cancelled)
+    - **notes**: Optional notes about the status change
+
+    Valid transitions:
+    - pending → processing, cancelled
+    - processing → shipped, cancelled
+    - shipped → delivered, cancelled
+    - any status → cancelled
+
+    Returns the updated order with new status.
+    """
+    try:
+        order = OrderService.update_order_status(
+            db=db,
+            order_id=order_id,
+            new_status=status_update.new_status,
+            user_id=current_user.id,
+            notes=status_update.notes
+        )
+        return order
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update order status: {str(e)}"
+        )
+
+
+@router.get("/{order_id}/history", response_model=List[OrderStatusHistoryResponse])
+def get_order_status_history(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Task ID: 09f4a7e6
+    Get the status change history for an order.
+
+    - **order_id**: ID of the order
+
+    Returns a chronological list of all status changes with user information and notes.
+    """
+    # Check if order exists
+    order = OrderService.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order not found"
+        )
+
+    history = OrderService.get_order_status_history(db, order_id)
+    return [OrderStatusHistoryResponse(**entry) for entry in history]
+
+
+@router.get("/{order_id}/valid-statuses", response_model=List[str])
+def get_valid_next_statuses(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Task ID: 09f4a7e6
+    Get list of valid next statuses for an order.
+
+    - **order_id**: ID of the order
+
+    Returns a list of valid status values that the order can transition to.
+    """
+    order = OrderService.get_order_by_id(db, order_id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order not found"
+        )
+
+    valid_statuses = OrderService.get_valid_next_statuses(order.status)
+    return valid_statuses

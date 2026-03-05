@@ -27,6 +27,7 @@ class OrderService {
 
   /**
    * Create a new order.
+   * Task ID: 6c269a18
    * @param {Object} orderData - Order creation data
    * @param {string} orderData.customer_name - Customer name
    * @param {string} orderData.customer_email - Customer email
@@ -174,6 +175,97 @@ class OrderService {
         return retryResponse.data;
       }
       throw error.response?.data || { detail: 'Failed to fetch orders' };
+    }
+  }
+
+  /**
+   * Update order status.
+   * Task ID: 09f4a7e6
+   * @param {number} orderId - Order ID
+   * @param {string} newStatus - New status
+   * @param {string} [notes] - Optional notes about the status change
+   * @returns {Promise<Object>} Updated order
+   */
+  async updateOrderStatus(orderId, newStatus, notes = null) {
+    try {
+      const payload = { new_status: newStatus };
+      if (notes) {
+        payload.notes = notes;
+      }
+
+      const response = await axios.patch(
+        `${API_URL}/${orderId}/status`,
+        payload,
+        this._getAuthHeaders()
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        await authService.refreshToken();
+        const payload = { new_status: newStatus };
+        if (notes) {
+          payload.notes = notes;
+        }
+        const retryResponse = await axios.patch(
+          `${API_URL}/${orderId}/status`,
+          payload,
+          this._getAuthHeaders()
+        );
+        return retryResponse.data;
+      }
+      throw error.response?.data || { detail: 'Failed to update order status' };
+    }
+  }
+
+  /**
+   * Get order status history.
+   * Task ID: 09f4a7e6
+   * @param {number} orderId - Order ID
+   * @returns {Promise<Array>} Status history entries
+   */
+  async getOrderStatusHistory(orderId) {
+    try {
+      const response = await axios.get(
+        `${API_URL}/${orderId}/history`,
+        this._getAuthHeaders()
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        await authService.refreshToken();
+        const retryResponse = await axios.get(
+          `${API_URL}/${orderId}/history`,
+          this._getAuthHeaders()
+        );
+        return retryResponse.data;
+      }
+      throw error.response?.data || { detail: 'Failed to fetch order status history' };
+    }
+  }
+
+  /**
+   * Get valid next statuses for an order.
+   * Task ID: 09f4a7e6
+   * @param {number} orderId - Order ID
+   * @returns {Promise<Array>} List of valid next statuses
+   */
+  async getValidNextStatuses(orderId) {
+    try {
+      const response = await axios.get(
+        `${API_URL}/${orderId}/valid-statuses`,
+        this._getAuthHeaders()
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        await authService.refreshToken();
+        const retryResponse = await axios.get(
+          `${API_URL}/${orderId}/valid-statuses`,
+          this._getAuthHeaders()
+        );
+        return retryResponse.data;
+      }
+      throw error.response?.data || { detail: 'Failed to fetch valid statuses' };
     }
   }
 }

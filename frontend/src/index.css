@@ -21,3 +21,9 @@ code {
 #root {
   min-height: 100vh;
 }
+
+/* Task ID: 1cf37973 - Dashboard animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

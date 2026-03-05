@@ -4,7 +4,8 @@ from sqlalchemy import func
 from typing import List, Optional, Tuple
 from datetime import datetime
 from decimal import Decimal
-from app.models.order import Order, OrderItem
+from app.models.order import Order, OrderItem, OrderStatusHistory
+from app.models.user import User
 from app.schemas.order import OrderCreate, OrderItemCreate
 import math
 
@@ -241,3 +242,178 @@ class OrderService:
             })
 
         return orders_with_count, total, total_pages
+
+    @staticmethod
+    def _validate_status_transition(current_status: str, new_status: str) -> bool:
+        """
+        Task ID: 09f4a7e6
+        Validate if a status transition is allowed.
+
+        Valid transitions:
+        - pending -> processing, cancelled
+        - processing -> shipped, cancelled
+        - shipped -> delivered, cancelled
+        - delivered -> (no transitions allowed)
+        - cancelled -> (no transitions allowed)
+        - any status -> cancelled (always allowed)
+
+        Args:
+            current_status: Current order status
+            new_status: Desired new status
+
+        Returns:
+            bool: True if transition is allowed, False otherwise
+        """
+        # Normalize statuses to lowercase
+        current = current_status.lower()
+        new = new_status.lower()
+
+        # Same status is not a valid transition
+        if current == new:
+            return False
+
+        # Any status can transition to cancelled
+        if new == "cancelled":
+            return True
+
+        # Define valid transitions
+        valid_transitions = {
+            "pending": ["processing"],
+            "processing": ["shipped"],
+            "shipped": ["delivered"],
+            "delivered": [],
+            "cancelled": []
+        }
+
+        # Check if transition is valid
+        return new in valid_transitions.get(current, [])
+
+    @staticmethod
+    def update_order_status(
+        db: Session,
+        order_id: int,
+        new_status: str,
+        user_id: int,
+        notes: Optional[str] = None
+    ) -> Order:
+        """
+        Task ID: 09f4a7e6
+        Update order status and record the change in history.
+
+        Args:
+            db: Database session
+            order_id: ID of the order to update
+            new_status: New status for the order
+            user_id: ID of the user making the change
+            notes: Optional notes about the status change
+
+        Returns:
+            Order: Updated order object
+
+        Raises:
+            ValueError: If order not found or invalid status transition
+        """
+        try:
+            # Get the order
+            order = db.query(Order).filter(Order.id == order_id).first()
+            if not order:
+                raise ValueError("Order not found")
+
+            # Validate status transition
+            if not OrderService._validate_status_transition(order.status, new_status):
+                raise ValueError(
+                    f"Invalid status transition from '{order.status}' to '{new_status}'. "
+                    f"Valid transitions: pending→processing→shipped→delivered, any→cancelled"
+                )
+
+            # Record old status
+            old_status = order.status
+
+            # Update order status
+            order.status = new_status
+
+            # Create status history entry
+            history_entry = OrderStatusHistory(
+                order_id=order_id,
+                old_status=old_status,
+                new_status=new_status,
+                changed_by=user_id,
+                notes=notes
+            )
+            db.add(history_entry)
+
+            # Commit changes
+            db.commit()
+            db.refresh(order)
+
+            return order
+
+        except ValueError as e:
+            db.rollback()
+            raise e
+        except Exception as e:
+            db.rollback()
+            raise Exception(f"Failed to update order status: {str(e)}")
+
+    @staticmethod
+    def get_order_status_history(db: Session, order_id: int) -> List[dict]:
+        """
+        Task ID: 09f4a7e6
+        Get the status change history for an order.
+
+        Args:
+            db: Database session
+            order_id: ID of the order
+
+        Returns:
+            List[dict]: List of status history entries with user information
+        """
+        # Query status history with user information
+        history_entries = (
+            db.query(OrderStatusHistory, User.full_name)
+            .join(User, OrderStatusHistory.changed_by == User.id)
+            .filter(OrderStatusHistory.order_id == order_id)
+            .order_by(OrderStatusHistory.created_at.desc())
+            .all()
+        )
+
+        # Build response
+        history_list = []
+        for entry, user_name in history_entries:
+            history_list.append({
+                "id": entry.id,
+                "order_id": entry.order_id,
+                "old_status": entry.old_status,
+                "new_status": entry.new_status,
+                "changed_by": entry.changed_by,
+                "changed_by_name": user_name,
+                "notes": entry.notes,
+                "created_at": entry.created_at
+            })
+
+        return history_list
+
+    @staticmethod
+    def get_valid_next_statuses(current_status: str) -> List[str]:
+        """
+        Task ID: 09f4a7e6
+        Get list of valid next statuses for the current order status.
+
+        Args:
+            current_status: Current order status
+
+        Returns:
+            List[str]: List of valid next statuses
+        """
+        current = current_status.lower()
+
+        # Define valid transitions
+        valid_transitions = {
+            "pending": ["processing", "cancelled"],
+            "processing": ["shipped", "cancelled"],
+            "shipped": ["delivered", "cancelled"],
+            "delivered": [],
+            "cancelled": []
+        }
+
+        return valid_transitions.get(current, [])

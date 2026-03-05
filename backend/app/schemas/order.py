@@ -132,3 +132,50 @@ class OrderListResponse(BaseModel):
                 "total_pages": 5
             }
         }
+
+
+class OrderStatusUpdate(BaseModel):
+    """
+    Task ID: 09f4a7e6
+    Schema for updating order status.
+    """
+    new_status: str = Field(..., min_length=1, description="New status for the order")
+    notes: Optional[str] = Field(None, description="Optional notes about the status change")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "new_status": "processing",
+                "notes": "Started processing the order"
+            }
+        }
+
+
+class OrderStatusHistoryResponse(BaseModel):
+    """
+    Task ID: 09f4a7e6
+    Schema for order status history response.
+    """
+    id: int
+    order_id: int
+    old_status: Optional[str]
+    new_status: str
+    changed_by: int
+    changed_by_name: Optional[str] = None
+    notes: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "id": 1,
+                "order_id": 1,
+                "old_status": "pending",
+                "new_status": "processing",
+                "changed_by": 1,
+                "changed_by_name": "John Doe",
+                "notes": "Started processing the order",
+                "created_at": "2026-03-05T10:30:00"
+            }
+        }

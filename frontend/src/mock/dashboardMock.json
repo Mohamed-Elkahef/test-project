@@ -1,0 +1,57 @@
+{
+  "summary": {
+    "total_orders": 145,
+    "orders_today": 8,
+    "total_revenue": 43250.50,
+    "revenue_today": 1847.95,
+    "orders_by_status": {
+      "pending": 12,
+      "processing": 8,
+      "shipped": 15,
+      "delivered": 105,
+      "cancelled": 5
+    },
+    "recent_orders": [
+      {
+        "id": 145,
+        "order_number": "ORD-20260305-0008",
+        "customer_name": "Sarah Johnson",
+        "status": "pending",
+        "total_amount": 299.99,
+        "created_at": "2026-03-05T14:30:00"
+      },
+      {
+        "id": 144,
+        "order_number": "ORD-20260305-0007",
+        "customer_name": "Michael Chen",
+        "status": "processing",
+        "total_amount": 449.50,
+        "created_at": "2026-03-05T13:15:00"
+      },
+      {
+        "id": 143,
+        "order_number": "ORD-20260305-0006",
+        "customer_name": "Emily Davis",
+        "status": "shipped",
+        "total_amount": 189.99,
+        "created_at": "2026-03-05T11:45:00"
+      },
+      {
+        "id": 142,
+        "order_number": "ORD-20260305-0005",
+        "customer_name": "Robert Wilson",
+        "status": "delivered",
+        "total_amount": 599.99,
+        "created_at": "2026-03-05T10:20:00"
+      },
+      {
+        "id": 141,
+        "order_number": "ORD-20260305-0004",
+        "customer_name": "Jessica Martinez",
+        "status": "pending",
+        "total_amount": 308.48,
+        "created_at": "2026-03-05T09:00:00"
+      }
+    ]
+  }
+}

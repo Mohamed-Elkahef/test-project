@@ -14,6 +14,22 @@ A simple order management web application with user authentication built with Re
 - User profile endpoint
 - Logout functionality
 
+### F002: Order Listing ✅
+- List all orders with pagination
+- Filter orders by status and date range
+- Display order details including customer info, status, total amount, and item count
+- Click to view full order details with line items
+- Color-coded status badges
+
+### F003: Order Creation ✅
+- Create new orders with customer information
+- Dynamic line items with add/remove functionality
+- Auto-calculated subtotals and grand total
+- Real-time total updates
+- Form validation (at least one item, quantities > 0)
+- Auto-generated order numbers (format: ORD-YYYYMMDD-XXXX)
+- Success redirect to order detail/list
+
 ## Tech Stack
 
 - **Frontend**: React 18 with Vite
@@ -132,6 +148,16 @@ The application will be available at `http://localhost:5173`
 
 - **GET** `/api/auth/me` - Get current user profile (requires authentication)
   - Header: `Authorization: Bearer <access_token>`
+
+### Orders
+
+- **POST** `/api/orders` - Create a new order (requires authentication)
+  - Body: `{ "customer_name": "John Doe", "customer_email": "john@example.com", "notes": "Optional notes", "items": [{ "product_name": "Product A", "quantity": 2, "unit_price": 99.99 }] }`
+
+- **GET** `/api/orders` - Get all orders with pagination and filters (requires authentication)
+  - Query params: `page`, `per_page`, `status`, `start_date`, `end_date`
+
+- **GET** `/api/orders/{id}` - Get specific order by ID (requires authentication)
 
 ## Project Structure
 
