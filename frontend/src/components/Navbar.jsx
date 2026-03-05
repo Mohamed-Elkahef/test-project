@@ -1,6 +1,6 @@
-// Task ID: c0c28f55
+// Task ID: 88cca822
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 /**
  * Navbar component showing logged-in user name with logout button.
@@ -22,7 +22,20 @@ const Navbar = () => {
     <nav style={styles.navbar}>
       <div style={styles.container}>
         <div style={styles.brand}>
-          <h2 style={styles.title}>Order Management</h2>
+          <Link to="/" style={styles.titleLink}>
+            <h2 style={styles.title}>Order Management</h2>
+          </Link>
+        </div>
+        <div style={styles.navLinks}>
+          <Link to="/" style={styles.navLink}>
+            Dashboard
+          </Link>
+          <Link to="/orders" style={styles.navLink}>
+            Orders
+          </Link>
+          <Link to="/orders/create" style={styles.navLink}>
+            Create Order
+          </Link>
         </div>
         <div style={styles.userSection}>
           <span style={styles.userName}>{user.full_name}</span>
@@ -54,10 +67,28 @@ const styles = {
     display: 'flex',
     alignItems: 'center'
   },
+  titleLink: {
+    textDecoration: 'none',
+    color: 'white'
+  },
   title: {
     margin: 0,
     fontSize: '1.5rem',
     fontWeight: 'bold'
+  },
+  navLinks: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1.5rem'
+  },
+  navLink: {
+    color: 'white',
+    textDecoration: 'none',
+    fontSize: '1rem',
+    fontWeight: '500',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    transition: 'background-color 0.2s'
   },
   userSection: {
     display: 'flex',

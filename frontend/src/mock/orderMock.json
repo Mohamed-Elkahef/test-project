@@ -1,0 +1,219 @@
+{
+  "orders": [
+    {
+      "id": 1,
+      "order_number": "ORD-20260305-0001",
+      "customer_name": "John Doe",
+      "customer_email": "john.doe@example.com",
+      "status": "pending",
+      "total_amount": "349.97",
+      "notes": "Please deliver by 5 PM",
+      "created_by": 1,
+      "created_at": "2026-03-05T10:30:00Z",
+      "updated_at": "2026-03-05T10:30:00Z",
+      "item_count": 2,
+      "items": [
+        {
+          "id": 1,
+          "product_name": "Product A",
+          "quantity": 2,
+          "unit_price": "99.99",
+          "subtotal": "199.98"
+        },
+        {
+          "id": 2,
+          "product_name": "Product B",
+          "quantity": 1,
+          "unit_price": "149.99",
+          "subtotal": "149.99"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "order_number": "ORD-20260305-0002",
+      "customer_name": "Jane Smith",
+      "customer_email": "jane.smith@example.com",
+      "status": "completed",
+      "total_amount": "599.95",
+      "notes": null,
+      "created_by": 1,
+      "created_at": "2026-03-04T11:15:00Z",
+      "updated_at": "2026-03-04T14:20:00Z",
+      "item_count": 1,
+      "items": [
+        {
+          "id": 3,
+          "product_name": "Product C",
+          "quantity": 5,
+          "unit_price": "119.99",
+          "subtotal": "599.95"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "order_number": "ORD-20260304-0001",
+      "customer_name": "Robert Johnson",
+      "customer_email": "robert.j@example.com",
+      "status": "shipped",
+      "total_amount": "1249.96",
+      "notes": "Fragile items - handle with care",
+      "created_by": 1,
+      "created_at": "2026-03-03T09:00:00Z",
+      "updated_at": "2026-03-03T16:45:00Z",
+      "item_count": 3,
+      "items": [
+        {
+          "id": 4,
+          "product_name": "Laptop Stand",
+          "quantity": 2,
+          "unit_price": "89.99",
+          "subtotal": "179.98"
+        },
+        {
+          "id": 5,
+          "product_name": "Monitor 27\"",
+          "quantity": 1,
+          "unit_price": "449.99",
+          "subtotal": "449.99"
+        },
+        {
+          "id": 6,
+          "product_name": "Wireless Keyboard",
+          "quantity": 3,
+          "unit_price": "129.99",
+          "subtotal": "389.97"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "order_number": "ORD-20260303-0001",
+      "customer_name": "Emily Davis",
+      "customer_email": "emily.davis@example.com",
+      "status": "cancelled",
+      "total_amount": "89.99",
+      "notes": "Customer requested cancellation",
+      "created_by": 1,
+      "created_at": "2026-03-02T14:20:00Z",
+      "updated_at": "2026-03-02T15:10:00Z",
+      "item_count": 1,
+      "items": [
+        {
+          "id": 7,
+          "product_name": "USB Hub",
+          "quantity": 1,
+          "unit_price": "89.99",
+          "subtotal": "89.99"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "order_number": "ORD-20260302-0001",
+      "customer_name": "Michael Brown",
+      "customer_email": "mbrown@example.com",
+      "status": "pending",
+      "total_amount": "2399.94",
+      "notes": "Large order - verify stock availability",
+      "created_by": 1,
+      "created_at": "2026-03-01T08:30:00Z",
+      "updated_at": "2026-03-01T08:30:00Z",
+      "item_count": 4,
+      "items": [
+        {
+          "id": 8,
+          "product_name": "Desktop Computer",
+          "quantity": 1,
+          "unit_price": "1299.99",
+          "subtotal": "1299.99"
+        },
+        {
+          "id": 9,
+          "product_name": "Monitor 32\"",
+          "quantity": 1,
+          "unit_price": "599.99",
+          "subtotal": "599.99"
+        },
+        {
+          "id": 10,
+          "product_name": "Mechanical Keyboard",
+          "quantity": 1,
+          "unit_price": "149.99",
+          "subtotal": "149.99"
+        },
+        {
+          "id": 11,
+          "product_name": "Gaming Mouse",
+          "quantity": 1,
+          "unit_price": "79.99",
+          "subtotal": "79.99"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "order_number": "ORD-20260228-0001",
+      "customer_name": "Sarah Wilson",
+      "customer_email": "sarah.w@example.com",
+      "status": "completed",
+      "total_amount": "199.98",
+      "notes": null,
+      "created_by": 1,
+      "created_at": "2026-02-28T13:45:00Z",
+      "updated_at": "2026-03-01T10:20:00Z",
+      "item_count": 2,
+      "items": [
+        {
+          "id": 12,
+          "product_name": "Webcam HD",
+          "quantity": 1,
+          "unit_price": "79.99",
+          "subtotal": "79.99"
+        },
+        {
+          "id": 13,
+          "product_name": "Microphone USB",
+          "quantity": 1,
+          "unit_price": "119.99",
+          "subtotal": "119.99"
+        }
+      ]
+    }
+  ],
+  "sample_products": [
+    {
+      "name": "Wireless Mouse",
+      "price": "29.99"
+    },
+    {
+      "name": "Mechanical Keyboard",
+      "price": "89.99"
+    },
+    {
+      "name": "USB-C Cable",
+      "price": "12.99"
+    },
+    {
+      "name": "Monitor Stand",
+      "price": "45.99"
+    },
+    {
+      "name": "Webcam HD",
+      "price": "79.99"
+    },
+    {
+      "name": "Laptop Stand",
+      "price": "89.99"
+    },
+    {
+      "name": "USB Hub",
+      "price": "34.99"
+    },
+    {
+      "name": "Desktop Computer",
+      "price": "1299.99"
+    }
+  ]
+}
